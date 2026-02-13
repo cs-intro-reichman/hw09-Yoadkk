@@ -85,6 +85,23 @@ public class List {
         return -1;
     }
 
+
+        public int instanceCount(){
+            int index = 0;
+            int counter = 0;
+            while (index != this.getSize()){
+                counter += this.get(index).count;
+
+                index++;
+                this.listIterator(index);
+
+            }
+
+            return counter;
+        }
+        
+    
+
     
 
     /** If the given character exists in one of the CharData objects in this list,
@@ -104,7 +121,7 @@ public class List {
                     break;
                 }
                 else{
-                    copyNode = copyNode.next;    
+                    copyNode = copyNode.next;  
                 }
             }
 
@@ -129,7 +146,6 @@ public class List {
                 }
                 copyNode.next = copyNode.next.next;
                 this.size--;  
-                // if (this.indexOf(chr) != -1) remove(chr);
                 return true;
             }
 
@@ -180,5 +196,8 @@ public class List {
         }
         // Returns an iterator that starts in that element
 	    return new ListIterator(current);
+        
     }
+
+
 }
