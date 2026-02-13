@@ -34,39 +34,37 @@ public class LanguageModel {
     /** Builds a language model from the text in the given file (the corpus). */
 	public void train(String fileName) {
 
-        String window = "";
-        //Coach will take the string and will check if it has the window inside
-        String coach = "";
+
+
         In in = new In(fileName);
-
-
         String fullString = in.readAll();
 
         
         
+        for (int i = 0; i + windowLength < fullString.length(); i++) {
+            String window = fullString.substring(i, i + windowLength);
+            char next = fullString.charAt(i + windowLength);
 
-        for (int i = 0; i < fullString.length() - windowLength; i++) {
-            List trainList = new List();
-            In in2 = new In(fileName);
-            window = fullString.substring(i, i+windowLength);
-            
-            
-            while(!in2.isEmpty()){
-                coach += in2.readChar();
-                if (coach.contains(window)){
-                    trainList.update(in2.readChar());
-                    coach = "";
-                    
-                }
+            List trainList = CharDataMap.get(window);
+            if (trainList == null) {
+                trainList = new List();
+                CharDataMap.put(window, trainList);
             }
-            this.calculateProbabilities(trainList);
-            CharDataMap.put(window, trainList);
+
+            trainList.update(next);
+        }
+
+        for (String key : CharDataMap.keySet()) {
+            calculateProbabilities(CharDataMap.get(key));
         }
 
         
 
 
-	}
+	
+
+}
+
 
 
 
@@ -137,7 +135,7 @@ public class LanguageModel {
         }
 
        
-        while(textLength > genText.length()){
+        while(textLength + initialText.length() > genText.length()){
             
             String window = genText.substring(genText.length() - windowLength);
             List probs = CharDataMap.get(window);
