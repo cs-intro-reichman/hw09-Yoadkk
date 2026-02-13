@@ -135,9 +135,14 @@ public class LanguageModel {
         }
 
        
-        while(textLength != genText.length()){
+        while(textLength < genText.length()){
+            
             String window = genText.substring(genText.length() - windowLength, genText.length());
+            if (CharDataMap.get(window)==null){
+                return genText;
+            }
             genText += this.getRandomChar(this.CharDataMap.get(window));
+            
 
         }
         
