@@ -124,24 +124,27 @@ public class LanguageModel {
 	 */
 	public String generate(String initialText, int textLength) {
         
-        
+        if (textLength <= initialText.length()) {
+        return initialText.substring(0, textLength);
+        }
 
 
         String genText = initialText;
 
-        //dot 2
-        if (windowLength > textLength){
+        //cant create window
+        if (windowLength > initialText.length()){
             return initialText;
         }
 
        
-        while(textLength < genText.length()){
+        while(textLength > genText.length()){
             
-            String window = genText.substring(genText.length() - windowLength, genText.length());
-            if (CharDataMap.get(window)==null){
+            String window = genText.substring(genText.length() - windowLength);
+            List probs = CharDataMap.get(window);
+            if (probs==null){
                 return genText;
             }
-            genText += this.getRandomChar(this.CharDataMap.get(window));
+            genText += this.getRandomChar(probs);
             
 
         }
